@@ -248,14 +248,14 @@ export default function HomePage() {
                 {/* Visual Image */}
                 <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[460px]" style={{ minHeight: "380px" }}>
                   <Image
-                    src="/images/founder.jpg"
+                    src="/images/dr-farman-malik-ceo.png"
                     alt="Dr. Farman Malik - CEO & Founder of Malik Group"
                     fill
                     priority
-                    className="object-cover object-top"
-                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    unoptimized
+                    className="object-cover object-[center_30%]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B3D91]/95 via-[#0B3D91]/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B3D91]/75 via-transparent to-transparent" />
                 </div>
 
                 {/* Top Badge: Leadership */}
