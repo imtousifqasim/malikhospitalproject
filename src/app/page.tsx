@@ -247,7 +247,7 @@ export default function HomePage() {
                 <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[460px]" style={{ minHeight: "380px" }}>
                   <Image
                     src="/images/founder.jpg"
-                    alt="Malik Medical Complex Hospital Leadership"
+                    alt="Dr. Farman Malik - CEO & Founder of Malik Group"
                     fill
                     priority
                     className="object-cover object-top"
@@ -256,36 +256,39 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B3D91]/95 via-[#0B3D91]/25 to-transparent" />
                 </div>
 
-                {/* Top Badge (Rating) */}
+                {/* Top Badge: Leadership */}
                 <div className="absolute top-3.5 left-3.5 z-10 bg-white/95 backdrop-blur-md rounded-xl py-1.5 px-3 shadow-md border border-slate-200/80 flex items-center gap-2 text-xs">
-                  <Star className="w-4 h-4 fill-amber-500 text-amber-500 shrink-0" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse shrink-0" />
                   <div>
-                    <span className="font-extrabold text-slate-900 block leading-tight">4.9 / 5.0</span>
-                    <span className="text-[10px] text-teal-700 font-semibold block">1,200+ Reviews</span>
+                    <span className="font-extrabold text-slate-900 block leading-tight">CEO &amp; Founder</span>
+                    <span className="text-[10px] text-teal-700 font-semibold block">Malik Group</span>
                   </div>
                 </div>
 
-                {/* Top-Right Badge (24/7 Emergency) */}
-                <div className="absolute top-3.5 right-3.5 z-10 bg-red-600 text-white rounded-xl py-1.5 px-3 shadow-md flex items-center gap-1.5 text-xs font-bold">
-                  <Activity className="w-3.5 h-3.5 text-white" />
-                  <span>24/7 Triage</span>
+                {/* Top-Right Badge (PMU) */}
+                <div className="absolute top-3.5 right-3.5 z-10 bg-[#0B3D91] text-white rounded-xl py-1.5 px-3 shadow-md flex items-center gap-1.5 text-xs font-bold border border-white/20">
+                  <Award className="w-3.5 h-3.5 text-teal-300" />
+                  <span>Head of INT PMU</span>
                 </div>
 
-                {/* Bottom Highlight Card */}
-                <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10 p-3.5 sm:p-4 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-lg space-y-1.5">
+                {/* Bottom Highlight Card - Dr. Farman Malik */}
+                <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10 p-3.5 sm:p-4 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-lg space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#0B3D91] bg-[#0B3D91]/10 px-2 py-0.5 rounded-full">
-                      Clinical Excellence
+                      Hospital Leadership
                     </span>
-                    <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                      OPD FEE: RS. 550
+                    <span className="text-xs font-extrabold text-teal-800 bg-teal-100 px-2.5 py-0.5 rounded-full">
+                      Malik Group
                     </span>
                   </div>
-                  <h4 className="font-bold text-slate-900 text-sm sm:text-base">
-                    Dr. Faraz Aslam &amp; Senior Consultants
-                  </h4>
-                  <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed line-clamp-2">
-                    General Physician, USA-trained Spine Surgeon &amp; FCPS pediatric faculty available for patient consultations.
+                  <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight leading-snug">
+                    Dr. Farman Malik
+                  </h3>
+                  <p className="text-xs text-[#0B3D91] font-bold leading-tight">
+                    A young entrepreneur, CEO &amp; Founder of Malik Group of projects
+                  </p>
+                  <p className="text-[11px] sm:text-xs text-slate-600 font-medium leading-normal pt-0.5">
+                    Head of INT Department PMU
                   </p>
                 </div>
               </div>
