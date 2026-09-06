@@ -1,0 +1,35 @@
+<svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F8FAFC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E2E8F0;stop-opacity:1" />
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#0B3D91" flood-opacity="0.07"/>
+    </filter>
+    <clipPath id="circleClip">
+      <circle cx="300" cy="225" r="135" />
+    </clipPath>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)" />
+
+  <!-- Centered Circular Frame -->
+  <circle cx="300" cy="225" r="148" fill="none" stroke="#CBD5E1" stroke-width="2" stroke-dasharray="6 6" opacity="0.6"/>
+  <circle cx="300" cy="225" r="135" fill="#FFFFFF" filter="url(#softGlow)" stroke="#E2E8F0" stroke-width="2"/>
+
+  <!-- Professional Doctor Bust Silhouette (Clipped to inner circle) -->
+  <g clip-path="url(#circleClip)">
+    <!-- Solid Muted Slate Silhouette -->
+    <!-- Head -->
+    <circle cx="300" cy="180" r="48" fill="#64748B" />
+    
+    <!-- Neck & Shoulders -->
+    <path d="M 282 225 L 318 225 L 318 245 C 318 245 365 252 405 305 L 195 305 C 235 252 282 245 282 245 Z" fill="#64748B" />
+    
+    <!-- Minimalist Stethoscope Accent in Hospital Teal -->
+    <path d="M 252 250 Q 245 315 288 335 Q 300 340 312 335 Q 355 315 348 250" fill="none" stroke="#0D9488" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="300" cy="340" r="9" fill="#0D9488" stroke="#FFFFFF" stroke-width="2"/>
+  </g>
+</svg>
