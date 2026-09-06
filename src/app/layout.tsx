@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppChatWidget from "@/components/WhatsAppChatWidget";
 import MobileStickyBottomBar from "@/components/MobileStickyBottomBar";
+import BackToTop from "@/components/BackToTop";
 import { HospitalJsonLd } from "@/components/JsonLd";
 import { hospitalInfo } from "@/data/hospital";
 
@@ -105,6 +106,9 @@ export default function RootLayout({
 
         {/* Floating WhatsApp Quick Interaction Widget */}
         <WhatsAppChatWidget />
+
+        {/* Floating Modern Back to Top Button with Circular Scroll Progress */}
+        <BackToTop />
 
         {/* Mobile Fixed Sticky Bottom Action Bar */}
         <MobileStickyBottomBar />

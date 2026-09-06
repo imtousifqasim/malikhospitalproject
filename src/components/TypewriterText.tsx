@@ -65,10 +65,10 @@ export default function TypewriterText({
   const displayedText = currentWord.substring(0, subIndex);
 
   return (
-    <span className={`inline-block align-baseline ${className}`}>
-      <span>{displayedText}</span>
+    <span className={`inline-flex items-center align-baseline ${className}`}>
+      <span>{displayedText || "\u200B"}</span>
       <span
-        className={`inline-block w-[3px] h-[0.85em] ml-1 rounded-full transition-opacity duration-150 align-baseline ${
+        className={`inline-block w-[3px] h-[0.85em] ml-1 rounded-full transition-opacity duration-150 ${
           blink ? "opacity-100" : "opacity-0"
         } ${cursorClassName}`}
         aria-hidden="true"

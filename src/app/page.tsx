@@ -130,20 +130,22 @@ export default function HomePage() {
                   Your Health, Our Sacred Priority
                 </h1>
 
-                {/* Dedicated Typing Effect Pill */}
-                <div className="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2 bg-blue-50/90 border border-blue-200/80 rounded-2xl px-3.5 py-2 text-sm sm:text-base font-bold text-slate-700 w-fit mx-auto lg:mx-0 shadow-2xs">
+                {/* Dedicated Typing Effect Pill - Fixed-height on mobile to eliminate layout shift */}
+                <div className="inline-flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-1 sm:gap-2 bg-blue-50/90 border border-blue-200/80 rounded-2xl px-3.5 py-2 text-xs sm:text-sm md:text-base font-bold text-slate-700 w-fit mx-auto lg:mx-0 shadow-2xs min-h-[58px] sm:min-h-[44px]">
                   <span className="text-[#0B3D91] flex items-center gap-1.5 shrink-0 font-extrabold">
-                    <Sparkles className="w-4 h-4 text-[#14B8A6]" />
+                    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#14B8A6] shrink-0" />
                     <span>Specialized Care:</span>
                   </span>
-                  <TypewriterText
-                    words={heroTypewriterWords}
-                    typingSpeed={65}
-                    deletingSpeed={35}
-                    pauseMs={2200}
-                    className="teal-gradient-text font-black"
-                    cursorClassName="bg-[#14B8A6]"
-                  />
+                  <div className="h-6 flex items-center justify-center text-center sm:text-left overflow-hidden">
+                    <TypewriterText
+                      words={heroTypewriterWords}
+                      typingSpeed={65}
+                      deletingSpeed={35}
+                      pauseMs={2200}
+                      className="teal-gradient-text font-black whitespace-nowrap"
+                      cursorClassName="bg-[#14B8A6]"
+                    />
+                  </div>
                 </div>
               </div>
 
