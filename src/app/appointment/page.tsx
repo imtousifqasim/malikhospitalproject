@@ -15,7 +15,7 @@ import AppointmentForm from "@/components/AppointmentForm";
 export const metadata = {
   title: "Book an Appointment — Specialist Consultation & Checkups",
   description:
-    "Schedule an appointment online with our expert specialists at Malik Medical Complex. General physician fee Rs. 550. Fast confirmation via EmailJS."
+    "Schedule an appointment online with our expert specialists at Malik Medical Complex. General physician fee Rs. 550. Instant online appointment booking & confirmation."
 };
 
 export default async function AppointmentPage({

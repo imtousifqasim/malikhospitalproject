@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
         <section className="space-y-2">
           <h2 className="text-lg font-bold text-slate-900">2. Information We Collect</h2>
           <p>
-            When booking an appointment or contacting us via our website, we collect personal contact details including your Name, Phone / WhatsApp number, Email address, and reported symptoms. This information is utilized solely to schedule consultations, deliver test notifications, and confirm appointments via EmailJS or direct phone callback.
+            When booking an appointment or contacting us via our website, we collect personal contact details including your Name, Phone / WhatsApp number, Email address, and reported symptoms. This information is utilized solely to schedule consultations, deliver test notifications, and confirm appointments via automated medical notifications, SMS, or direct phone callback.
           </p>
         </section>
 

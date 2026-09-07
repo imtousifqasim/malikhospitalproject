@@ -47,7 +47,7 @@ export default function ContactForm() {
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "public_key_malik";
 
     try {
-      // 1. Try sending via EmailJS if configured
+      // 1. Dispatch messaging service if configured
       if (
         publicKey &&
         publicKey !== "public_key_malik" &&
@@ -56,7 +56,7 @@ export default function ContactForm() {
         await emailjs.send(serviceId, templateId, templateParams, publicKey);
       } else {
         await new Promise((resolve) => setTimeout(resolve, 300));
-        console.log("Simulated EmailJS Contact Form:", templateParams);
+        console.log("Simulated Contact Form Dispatch:", templateParams);
       }
 
       // 2. Persist message to Supabase database
@@ -251,7 +251,7 @@ export default function ContactForm() {
         ) : (
           <>
             <Send className="w-4 h-4" />
-            <span>Send Message via EmailJS</span>
+            <span>Send Message</span>
           </>
         )}
       </button>
