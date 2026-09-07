@@ -229,6 +229,15 @@ export default function Footer() {
           <p className="leading-relaxed">
             &copy; {new Date().getFullYear()} {hospitalInfo.name}. All rights reserved. | A project of Malik Group
           </p>
+          <div className="flex items-center gap-4 text-xs text-slate-400">
+            <Link href="/staff/login" className="hover:text-teal-300 transition-colors">
+              Staff Portal
+            </Link>
+            <span>&bull;</span>
+            <Link href="/admin/login" className="hover:text-amber-300 transition-colors">
+              Executive Portal
+            </Link>
+          </div>
           <p className="flex items-center justify-center gap-2 shrink-0 text-slate-300">
             <span>Dedicated to serving humanity with excellence</span>
             <Heart className="w-4 h-4 text-red-500 fill-current shrink-0" />

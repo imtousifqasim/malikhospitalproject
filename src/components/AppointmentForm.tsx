@@ -17,6 +17,8 @@ import {
 import { departments } from "@/data/departments";
 import { doctors } from "@/data/doctors";
 import { hospitalInfo } from "@/data/hospital";
+import { createClient } from "@/lib/supabase/client";
+import { validateAndFormatWhatsApp } from "@/lib/phone";
 
 interface AppointmentFormProps {
   initialDoctorSlug?: string;
@@ -54,6 +56,7 @@ export default function AppointmentForm({
   const [submitted, setSubmitted] = useState(false);
   const [generatedToken, setGeneratedToken] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
 
   // Dynamic Visit Types
   const visitTypes = [
@@ -127,18 +130,21 @@ export default function AppointmentForm({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setPhoneError(null);
 
     if (!patientName.trim()) {
       setError("Please provide the patient full name.");
       return;
     }
 
-    const cleanPhone = phone.replace(/[^0-9+]/g, "");
-    if (!cleanPhone || cleanPhone.length < 10) {
-      setError("Please provide a valid Pakistani contact number (e.g. 0300-1234567).");
+    const phoneCheck = validateAndFormatWhatsApp(phone);
+    if (!phoneCheck.isValid) {
+      const msg = phoneCheck.error || "Please provide an active WhatsApp mobile number (e.g. 0300-1234567).";
+      setPhoneError(msg);
+      setError(msg);
       return;
     }
 
@@ -149,15 +155,45 @@ export default function AppointmentForm({
 
     setLoading(true);
 
-    setTimeout(() => {
-      const randomId = Math.floor(100 + Math.random() * 900);
-      const prefix = currentDoctorObj ? currentDoctorObj.name.substring(3, 6).toUpperCase() : "MMC";
-      const token = `${prefix}-${randomId}`;
+    const randomId = Math.floor(100 + Math.random() * 900);
+    const prefix = currentDoctorObj ? currentDoctorObj.name.substring(3, 6).toUpperCase() : "MMC";
+    const token = `${prefix}-${randomId}`;
 
+    try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+      if (supabaseUrl && supabaseAnonKey) {
+        const supabase = createClient();
+        const { error: insertErr } = await supabase.from("appointments").insert({
+          token: token,
+          patient_name: patientName.trim(),
+          phone: phoneCheck.cleanPhone,
+          gender: gender,
+          age: age.trim() || null,
+          patient_type: patientType,
+          visit_type: visitType,
+          department: currentDeptObj?.name || selectedDepartment || "General Medicine",
+          doctor: currentDoctorObj?.name || selectedDoctor || "First Available Specialist",
+          date: date,
+          time_slot: timeSlot,
+          symptoms: symptoms.trim() || null,
+          status: "pending",
+          booked_by_name: "Online / Website Patient",
+          booked_by_role: "patient",
+        });
+
+        if (insertErr) {
+          console.warn("Supabase appointment insertion notice:", insertErr.message);
+        }
+      }
+    } catch (err) {
+      console.warn("Supabase client not yet connected:", err);
+    } finally {
       setGeneratedToken(token);
       setLoading(false);
       setSubmitted(true);
-    }, 600);
+    }
   };
 
   const handleReset = () => {
@@ -165,6 +201,7 @@ export default function AppointmentForm({
     setGeneratedToken("");
     setPatientName("");
     setPhone("");
+    setPhoneError(null);
     setAge("");
     setSymptoms("");
     setError(null);
@@ -455,20 +492,53 @@ export default function AppointmentForm({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Phone / WhatsApp Number *
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-700">
+                  WhatsApp Mobile Number *
+                </label>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                  <MessageCircle className="w-3 h-3 text-emerald-600" />
+                  Active WhatsApp Required
+                </span>
+              </div>
               <div className="relative">
                 <input
                   type="tel"
-                  placeholder="e.g. 0300-1234567"
+                  placeholder="0300-1234567 or +923001234567"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-3.5 text-sm text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-[#0B3D91] shadow-xs"
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    if (phoneError) setPhoneError(null);
+                  }}
+                  onBlur={() => {
+                    if (phone.trim()) {
+                      const res = validateAndFormatWhatsApp(phone);
+                      if (!res.isValid) {
+                        setPhoneError(res.error || "Invalid WhatsApp mobile number.");
+                      } else {
+                        setPhoneError(null);
+                      }
+                    }
+                  }}
+                  className={`w-full rounded-xl border bg-white py-2.5 pl-10 pr-3.5 text-sm text-slate-800 focus:outline-hidden focus:ring-2 shadow-xs transition-colors ${
+                    phoneError
+                      ? "border-rose-300 focus:ring-rose-500 bg-rose-50/20"
+                      : "border-slate-300 focus:ring-[#0B3D91]"
+                  }`}
                   required
                 />
-                <Phone className="w-4 h-4 text-slate-400 absolute top-3.5 left-3.5 pointer-events-none" />
+                <Phone className={`w-4 h-4 absolute top-3.5 left-3.5 pointer-events-none ${phoneError ? "text-rose-400" : "text-slate-400"}`} />
               </div>
+              {phoneError ? (
+                <p className="text-xs text-rose-600 mt-1 flex items-center gap-1 font-medium animate-in fade-in-50">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{phoneError}</span>
+                </p>
+              ) : (
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Digital token number and hospital updates will be sent to this WhatsApp number.
+                </p>
+              )}
             </div>
           </div>
 

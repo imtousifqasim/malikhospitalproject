@@ -248,12 +248,12 @@ export default function HomePage() {
                 {/* Visual Image */}
                 <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[460px]" style={{ minHeight: "380px" }}>
                   <Image
-                    src="/images/dr-farman-malik-ceo.png"
+                    src="/images/dr-farman-malik.png"
                     alt="Dr. Farman Malik - CEO & Founder of Malik Group"
                     fill
                     priority
                     unoptimized
-                    className="object-cover object-[center_30%]"
+                    className="object-cover object-[center_20%]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B3D91]/75 via-transparent to-transparent" />
                 </div>

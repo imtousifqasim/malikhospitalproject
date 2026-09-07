@@ -4,10 +4,13 @@ import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Send, CheckCircle2, AlertCircle, Loader2, User, Phone, Mail, MessageSquare } from "lucide-react";
 import { hospitalInfo } from "@/data/hospital";
+import { createClient } from "@/lib/supabase/client";
+import { validateAndFormatWhatsApp } from "@/lib/phone";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("General Inquiry");
   const [message, setMessage] = useState("");
@@ -17,8 +20,18 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+    setPhoneError(null);
+
+    const phoneCheck = validateAndFormatWhatsApp(phone);
+    if (!phoneCheck.isValid) {
+      const msg = phoneCheck.error || "Please provide an active WhatsApp mobile number (e.g. 0300-1234567).";
+      setPhoneError(msg);
+      setError(msg);
+      return;
+    }
+
+    setLoading(true);
 
     const templateParams = {
       from_name: name,
@@ -34,6 +47,7 @@ export default function ContactForm() {
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "public_key_malik";
 
     try {
+      // 1. Try sending via EmailJS if configured
       if (
         publicKey &&
         publicKey !== "public_key_malik" &&
@@ -41,12 +55,33 @@ export default function ContactForm() {
       ) {
         await emailjs.send(serviceId, templateId, templateParams, publicKey);
       } else {
-        await new Promise((resolve) => setTimeout(resolve, 700));
+        await new Promise((resolve) => setTimeout(resolve, 300));
         console.log("Simulated EmailJS Contact Form:", templateParams);
       }
+
+      // 2. Persist message to Supabase database
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+      if (supabaseUrl && supabaseAnonKey) {
+        const supabase = createClient();
+        const { error: insertErr } = await supabase.from("contact_messages").insert({
+          name: name.trim(),
+          phone: phoneCheck.cleanPhone,
+          email: email.trim() || null,
+          subject: subject.trim() || "General Inquiry",
+          message: message.trim(),
+          status: "unread",
+        });
+
+        if (insertErr) {
+          console.warn("Supabase contact_messages insertion notice:", insertErr.message);
+        }
+      }
+
       setSubmitted(true);
     } catch (err) {
-      console.warn("EmailJS error:", err);
+      console.warn("Contact form submission error:", err);
       setSubmitted(true);
     } finally {
       setLoading(false);
@@ -68,6 +103,7 @@ export default function ContactForm() {
             setSubmitted(false);
             setName("");
             setPhone("");
+            setPhoneError(null);
             setEmail("");
             setMessage("");
           }}
@@ -107,20 +143,48 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label className="block text-xs sm:text-sm font-semibold text-slate-700 mb-1">
-            Phone / WhatsApp *
-          </label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-700">
+              WhatsApp Mobile *
+            </label>
+            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">
+              Active WhatsApp
+            </span>
+          </div>
           <div className="relative">
-            <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-3.5 pointer-events-none" />
+            <Phone className={`w-4 h-4 absolute left-3 top-3.5 pointer-events-none ${phoneError ? "text-rose-400" : "text-slate-400"}`} />
             <input
               type="tel"
-              placeholder="e.g. 0300-6972295"
+              placeholder="0300-1234567 or +923001234567"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-3 py-2.5 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:ring-[#0B3D91] focus:outline-hidden"
+              onChange={(e) => {
+                setPhone(e.target.value);
+                if (phoneError) setPhoneError(null);
+              }}
+              onBlur={() => {
+                if (phone.trim()) {
+                  const res = validateAndFormatWhatsApp(phone);
+                  if (!res.isValid) {
+                    setPhoneError(res.error || "Invalid WhatsApp mobile number.");
+                  } else {
+                    setPhoneError(null);
+                  }
+                }
+              }}
+              className={`w-full rounded-xl border bg-slate-50 pl-9 pr-3 py-2.5 text-sm text-slate-800 focus:bg-white focus:ring-2 focus:outline-hidden transition-colors ${
+                phoneError
+                  ? "border-rose-300 focus:ring-rose-500 bg-rose-50/20"
+                  : "border-slate-200 focus:ring-[#0B3D91]"
+              }`}
               required
             />
           </div>
+          {phoneError && (
+            <p className="text-xs text-rose-600 mt-1 flex items-center gap-1 font-medium animate-in fade-in-50">
+              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>{phoneError}</span>
+            </p>
+          )}
         </div>
       </div>
 

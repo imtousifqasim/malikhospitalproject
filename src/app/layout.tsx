@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppChatWidget from "@/components/WhatsAppChatWidget";
-import MobileStickyBottomBar from "@/components/MobileStickyBottomBar";
-import BackToTop from "@/components/BackToTop";
+import ConditionalPublicLayout from "@/components/ConditionalPublicLayout";
 import { HospitalJsonLd } from "@/components/JsonLd";
 import { hospitalInfo } from "@/data/hospital";
 
@@ -81,6 +77,13 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1
     }
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   }
 };
 
@@ -95,23 +98,7 @@ export default function RootLayout({
         <HospitalJsonLd />
       </head>
       <body className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 selection:bg-[#14B8A6]/20 selection:text-[#0B3D91]">
-        {/* Two-Tier Unified Modern Header */}
-        <Navbar />
-
-        {/* Main Body Content */}
-        <main className="flex-1">{children}</main>
-
-        {/* Comprehensive Hospital Footer */}
-        <Footer />
-
-        {/* Floating WhatsApp Quick Interaction Widget */}
-        <WhatsAppChatWidget />
-
-        {/* Floating Modern Back to Top Button with Circular Scroll Progress */}
-        <BackToTop />
-
-        {/* Mobile Fixed Sticky Bottom Action Bar */}
-        <MobileStickyBottomBar />
+        <ConditionalPublicLayout>{children}</ConditionalPublicLayout>
       </body>
     </html>
   );

@@ -33,9 +33,9 @@
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  :where(h1, h2, h3, h4, h5, h6) {
     font-family: var(--font-poppins), "Poppins", system-ui, sans-serif;
-    color: #0F172A;
+    color: var(--color-text-heading, #0F172A);
     letter-spacing: -0.02em;
   }
 }

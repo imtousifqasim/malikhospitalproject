@@ -40,5 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
-.env*
+# scripts with local tokens
+scripts/push-*.js
+scripts/verify-db.js
+scripts/create-admin.js
+.agents/
